@@ -36,8 +36,8 @@ export default function Generate() {
 		// Get the response data from server as JSON.
 		// If server returns the name submitted, that means the form works.
 		const result = await response.json()
-		console.log(result)
-		alert(`Is this your full name: ${result.data.sender}`)
+		// console.log(result)
+		// alert(`Is this your full name: ${result.data.sender}`)
 	}
 
 	const [type, setType] = useState('priority');
