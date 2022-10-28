@@ -144,7 +144,7 @@ export default function Generate() {
 								<div className="card-body">
 									<div className="form-group">
 										<label>Upload CSV</label>
-										<input type="file" class="form-control" />
+										<input type="file" className="form-control" />
 									</div>
 									<div className="form-group mt-3">
 										<button className="btn btn-primary btn-block" type="submit">Preview</button>
