@@ -4,6 +4,9 @@ import styles from '../../styles/Home.module.css'
 import { useState } from 'react'
 
 export default function Generate() {
+	const [ preview, setPreview ] = useState({
+		success : false
+	})
 	// Handle the submit event on form submit.
 	const handleSubmit = async (event) => {
 		// Stop the form from submitting and refreshing the page.
@@ -36,12 +39,12 @@ export default function Generate() {
 		// Get the response data from server as JSON.
 		// If server returns the name submitted, that means the form works.
 		const result = await response.json()
-		// console.log(result)
-		// alert(`Is this your full name: ${result.data.sender}`)
+		console.log(result.result_data)
+		setPreview(result.result_data)
 	}
 
-	const [type, setType] = useState('priority');
-	const [size, setSize] = useState('4x6');
+	const [ type, setType ] = useState('priority');
+	const [ size, setSize ] = useState('4x6');
 
 	const handleTypeChange = event => {
 		console.log(event.target.value);
@@ -104,11 +107,11 @@ export default function Generate() {
 										</div>
 
 										<div className="row">
-											<div className="form-group col-md-6">
+											<div className="form-group col-lg-6">
 												<label htmlFor="sender" className="form-control-label">Sender <code>*</code></label>
 												<textarea className="form-control h-auto" id="sender" rows="6" required></textarea>
 											</div>
-											<div className="form-group col-md-6">
+											<div className="form-group col-lg-6">
 												<label htmlFor="receiver" className="form-control-label">Receiver <code>*</code></label>
 												<textarea className="form-control h-auto" id="receiver" rows="6" required></textarea>
 											</div>
@@ -159,6 +162,18 @@ export default function Generate() {
 									<h4>Preview</h4>
 								</div>
 								<div className="card-body">
+									{ preview.success 
+									? <h2 className="section-title text-success">Validated successfully.</h2>
+									: 
+									<div className="page-error">
+										<div className="page-inner">
+											<h3 className="text-danger">Error !</h3>
+											<div className="page-description mb-5 text-danger">
+												Address not valid. <br/> Atleast one of the address you submitted is invalid.
+											</div>
+										</div>
+									</div>
+									}
 								</div>
 							</div>
 						</div>

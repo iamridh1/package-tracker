@@ -1,50 +1,86 @@
 /* 
 // Generate package tracking.
 */
-import DOMParser from 'react-dom'
+import { XMLParser } from 'fast-xml-parser'
 
 export default async function generateTracking(req, res) {
-	const API_URL = "https://secure.shippingapis.com/ShippingAPI.dll?API="
-	const VERIFY_API = "Verify"
-	const USPS_USER_ID = "360DEDON0513"
-
 	const body = req.body
 	// console.log('body: ', body)
 	const { type, sender, receiver, weight, size } = body
-	const sender_info = sender.split('\n')
-	const sender_name = sender_info[0]
-	const sender_street1 = sender_info.length == 3 ? sender_info[1] : null
-	const sender_street2 = sender_info.length == 4 ? sender_info[1] : null
-	const sender_address = sender_info[sender_info.length - 1].split(',').map(element => element.trim())
-	const [ city, state_zip ] = sender_address
-	const [ state, zipcode ] = state_zip.split(' ')
-	const [ zip5, zip4 ] = zipcode.length > 5 ? zipcode.split('-') : [zipcode, null]
-	const URL_PARAM = `<AddressValidateRequest USERID="${USPS_USER_ID}"><Revision>1</Revision><Address ID="0"><Address1>${sender_street1}</Address1><Address2>${sender_street2}</Address2><City>${city}</City><State>${state}</State><Zip5>${zip5}</Zip5><Zip4>${zip4}</Zip4></Address></AddressValidateRequest>`
 	
-	const uri = `${API_URL}${VERIFY_API}&XML=${URL_PARAM}`
-	const encoded = encodeURI(uri);
-	const response = await fetch(encoded, {
-		// Tell the server we're sending JSON.
-		headers: {
-			'Content-Type': 'text/xml',
-		},
-		// The method is POST because we are sending data.
-		method: 'GET',
-	})
-	const data = await response.text()
-
-	console.log({ encoded, data })
-
 	// Both of these are required.
 	if (!body.sender || !body.receiver) {
 		return res.json({
 			data: 'Sender or receiver not found'
 		})
 	}
-
-	// Found the name.
-	// res.json({ data: `${body.sender} ${body.receiver}` })
+	
+	const sender_data = await validateAddress(sender)
+	const receiver_data = await validateAddress(receiver)
+	var result_data
+	if ( sender_data.success && receiver_data.success) {
+		result_data = {
+			success : true,
+			sender_data : sender_data.data,
+			receiver_data : receiver_data.data,
+			type,
+			weight,
+			size
+		}
+	} else {
+		result_data = {
+			success : false,
+			message : "invalid address"
+		}
+	}
+	
 	res.json({
-		data: body
+		result_data
 	})
+}
+
+async function validateAddress(param) {
+    const API_URL = "https://secure.shippingapis.com/ShippingAPI.dll?API="
+	const VERIFY_API = "Verify"
+	const USPS_USER_ID = "360DEDON0513"
+
+	const info = param.split('\n')
+	const name = info[0]
+	const street1 = (info.length == 3 || info.length == 4) ? info[1] : null
+	const street2 = info.length == 4 ? info[2] : null
+	const add = info[info.length - 1].split(',').map(element => element.trim())
+	const [ city, state_zip ] = add
+	const [ state, zipcode ] = state_zip.split(' ')
+	const [ zip5, zip4 ] = zipcode.length > 5 ? zipcode.split('-') : [zipcode, null]
+	const URL_PARAM = `<AddressValidateRequest USERID="${USPS_USER_ID}"><Revision>1</Revision><Address ID="0"><Address1>${street1}</Address1><Address2>${street2}</Address2><City>${city}</City><State>${state}</State><Zip5>${zip5}</Zip5><Zip4>${zip4}</Zip4></Address></AddressValidateRequest>`
+	
+	const uri = `${API_URL}${VERIFY_API}&XML=${URL_PARAM}`
+	const encoded = encodeURI(uri)
+	const response = await fetch(encoded, {
+		headers: {
+			'Content-Type': 'text/xml',
+		},
+		method: 'GET',
+	})
+	const xmldata = await response.text()
+	const options = { ignoreDeclaration: true, ignorePiTags: true, }
+	const parser = new XMLParser(options)
+	const result = parser.parse(xmldata)
+	console.log(result)
+	var success = false
+	var data = { message : "invalid address" }
+	if (! result.AddressValidateResponse.Address.Error) {
+		success = true
+		data = {
+			name : name,
+			street1 : result.AddressValidateResponse.Address.Address2,
+			street2 : result.AddressValidateResponse.Address.Address1,
+			city : result.AddressValidateResponse.Address.City,
+			state : result.AddressValidateResponse.Address.State,
+			zip5 : result.AddressValidateResponse.Address.Zip5,
+			zip4 : result.AddressValidateResponse.Address.Zip4,
+		}
+	}
+
+	return {success, data}
 }
