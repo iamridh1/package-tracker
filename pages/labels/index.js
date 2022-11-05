@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
 
-export default function Track() {
+export default function Label() {
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -25,10 +25,10 @@ export default function Track() {
 				</p>
 
 				<div className={styles.grid}>
-					<a href="/tracks/generate" className={styles.card}>
-						<h2>Generate Tracking &rarr;</h2>
+					<Link href="/labels/generate" className={styles.card}>
+						<h2>Generate Tracking Label &rarr;</h2>
 						<p>Instantly generate your tracking and download in png.</p>
-					</a>
+					</Link>
 				</div>
 			</main>
 

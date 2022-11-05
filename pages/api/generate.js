@@ -3,29 +3,33 @@
 */
 import { XMLParser } from 'fast-xml-parser'
 
-export default async function generateTracking(req, res) {
+export default async function generateTrackingLabel(req, res) {
+	// Get data from request
 	const body = req.body
-	// console.log('body: ', body)
 	const { type, sender, receiver, weight, size } = body
 	
 	// Both of these are required.
 	if (!body.sender || !body.receiver) {
 		return res.json({
-			data: 'Sender or receiver not found'
+			success : false,
+			message: 'Sender or receiver not found'
 		})
 	}
 	
+	// Validate sender and receiver address return
 	const sender_data = await validateAddress(sender)
 	const receiver_data = await validateAddress(receiver)
+	
+	const current = new Date()
+	const date = `${current.getDate()}/${current.getMonth()+1}/${current.getYear()}`
+
 	var result_data
 	if ( sender_data.success && receiver_data.success) {
 		result_data = {
 			success : true,
 			sender_data : sender_data.data,
 			receiver_data : receiver_data.data,
-			type,
-			weight,
-			size
+			type, weight, size, date
 		}
 	} else {
 		result_data = {
@@ -66,9 +70,11 @@ async function validateAddress(param) {
 	const options = { ignoreDeclaration: true, ignorePiTags: true, }
 	const parser = new XMLParser(options)
 	const result = parser.parse(xmldata)
-	console.log(result)
+	// console.log(result)
+
 	var success = false
 	var data = { message : "invalid address" }
+	
 	if (! result.AddressValidateResponse.Address.Error) {
 		success = true
 		data = {

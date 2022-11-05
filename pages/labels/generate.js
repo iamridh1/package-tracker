@@ -1,21 +1,22 @@
+/* eslint-disable @next/next/no-img-element */
 import Head from 'next/head'
 import Link from 'next/link'
-import styles from '../../styles/Home.module.css'
 import { useState } from 'react'
+import styles from '../../styles/Home.module.css'
 
-export default function Generate() {
+export default function GenerateLabel() {
 	const [ preview, setPreview ] = useState({
 		success : false
 	})
+
 	// Handle the submit event on form submit.
 	const handleSubmit = async (event) => {
 		// Stop the form from submitting and refreshing the page.
 		event.preventDefault()
 
-		// Cast the event target to an html form
 		const form = event.target
 
-		// Get data from the form.
+		// Get data from the form
 		const data = {
 			type: form.type.value,
 			sender: form.sender.value,
@@ -43,18 +44,20 @@ export default function Generate() {
 		setPreview(result.result_data)
 	}
 
-	const [ type, setType ] = useState('priority');
-	const [ size, setSize ] = useState('4x6');
+	const [ type, setType ] = useState('priority')
+	const [ size, setSize ] = useState('4x6')
 
+	// Handle label type change
 	const handleTypeChange = event => {
-		console.log(event.target.value);
-		setType(event.target.value);
-	};
+		console.log(event.target.value)
+		setType(event.target.value)
+	}
 	
+	// Handle page size change
 	const handleSizeChange = event => {
-		console.log(event.target.value);
-		setSize(event.target.value);
-	};
+		console.log(event.target.value)
+		setSize(event.target.value)
+	}
 
 	return (
 		<div className="container">
@@ -78,7 +81,7 @@ export default function Generate() {
 
 					<div className="row">
 						
-						<div className="col-md-6">
+						<div className="col-md-7">
 							<div className="card">
 								<div className="card-header">
 									<h4>Generate Tracking Label</h4>
@@ -143,7 +146,7 @@ export default function Generate() {
 										</div>
 									</form>
 								</div>
-								<hr />
+								{/* <hr />
 								<div className="card-body">
 									<div className="form-group">
 										<label>Upload CSV</label>
@@ -152,20 +155,72 @@ export default function Generate() {
 									<div className="form-group mt-3">
 										<button className="btn btn-primary btn-block" type="submit">Preview</button>
 									</div>
-								</div>
+								</div> */}
 							</div>
 						</div>
 						
-						<div className="col-md-6">
+						<div className="col-md-5">
 							<div className="card">
 								<div className="card-header">
 									<h4>Preview</h4>
 								</div>
 								<div className="card-body">
 									{ preview.success 
-									? <h2 className="section-title text-success">Validated successfully.</h2>
-									: 
-									<div className="page-error">
+									? <div>
+										<div className="w-auto border border-2 border-dark text-dark p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '14px' }}>
+											<div className="row">
+												<div className="col-12">
+													<img src="/print-images/priority.jpg" alt="Logo" width="100%" 
+													style={{ borderBottom: '4px solid black', margin: '0px' }} />
+												</div>
+												<div className="col-12">
+													<img src="/print-images/priority2.png" alt="Logo" width="100%" 
+													style={{ borderBottom: '4px solid black', margin: '0px' }} />
+												</div>
+												<div className="col-6 p-4">
+													<address>
+														{ preview.sender_data.name ? preview.sender_data.name.toUpperCase() : null }<br/>
+														{ preview.sender_data.street1 ? preview.sender_data.street1 : null }
+														{ preview.sender_data.street2 ? ' '+preview.sender_data.street2 : null }<br/>
+														{ preview.sender_data.city ? ' '+preview.sender_data.city : null }
+														{ preview.sender_data.state ? ' '+preview.sender_data.state : null }
+														{ preview.sender_data.zip5 ? ' '+preview.sender_data.zip5 : null }
+														{ preview.sender_data.zip4 ? '-'+preview.sender_data.zip4 : null }
+													</address>
+												</div>
+												<div className="col-6 p-4">
+													<address className="text-right float-end">
+														Ship Date: { preview.date }<br/>
+														Weight: { preview.weight +' lb' }
+													</address>
+												</div>
+												<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
+													<address>
+														{ preview.receiver_data.name ? preview.receiver_data.name.toUpperCase() : null }<br/>
+														{ preview.receiver_data.street1 ? preview.receiver_data.street1 : null }
+														{ preview.receiver_data.street2 ? ' '+preview.receiver_data.street2 : null }<br/>
+														{ preview.receiver_data.city ? ' '+preview.receiver_data.city : null }
+														{ preview.receiver_data.state ? ' '+preview.receiver_data.state : null }
+														{ preview.receiver_data.zip5 ? ' '+preview.receiver_data.zip5 : null }
+														{ preview.receiver_data.zip4 ? '-'+preview.receiver_data.zip4 : null }
+													</address>
+												</div>
+												<div className="col-12 text-center">
+													<div style={{ borderTop: '4px solid black', margin: '0px' }}>
+														<div className="fw-bold">USPS TRACKING #EP</div>
+														<img src="/print-images/shippo.jpg" alt="Logo" width="100" />
+														<div className="fw-bold">9205 5900 9001 1319 7279 0376 03</div>
+													</div>
+												</div>
+												<div className="col-12 text-center">
+													<div style={{ borderTop: '4px solid black', margin: '0px' }}>
+														<img src="/print-images/shippo.jpg" alt="Logo" width="100" />
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									: <div className="page-error">
 										<div className="page-inner">
 											<h3 className="text-danger">Error !</h3>
 											<div className="page-description mb-5 text-danger">
