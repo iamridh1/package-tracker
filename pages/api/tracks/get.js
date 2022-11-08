@@ -2,33 +2,17 @@ import { Prisma } from '@prisma/client'
 import { prisma } from '../../db/prisma'
 
 export default async function handle(req, res) {
-	const body = req.body
-	const { type, tracknum } = body
-	
-	// Both of these are required.
-	if (!body.type || !body.tracknum) {
-		res.json({
-			success : false,
-			message: 'Sender or receiver not found'
-		})
-	}
-
-	let track = Prisma.UserCreateInput
-	track = {
-		type : type,
-		trackNum : tracknum
-	}
-
 	try {
 		// add new track number
-		const addTracks = await prisma.track.create({
-			data: track,
+		const track = await prisma.track.findFirst({
+			where: {
+                used: false
+            }
 		})
-		
+        
 		res.json({
 			success : true,
-			message: 'Tracking number has been added successfully',
-			addTracks
+			track
 		})
 	} catch (e) {
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {

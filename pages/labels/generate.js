@@ -3,6 +3,8 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import styles from '../../styles/Home.module.css'
+import bwipjs from 'bwip-js'
+import * as htmlToImage from 'html-to-image'
 
 export default function GenerateLabel() {
 	const [ preview, setPreview ] = useState({
@@ -40,8 +42,45 @@ export default function GenerateLabel() {
 		// Get the response data from server as JSON.
 		// If server returns the name submitted, that means the form works.
 		const result = await response.json()
-		console.log(result.result_data)
-		setPreview(result.result_data)
+		// console.log(result.result_data)
+		const preview = result.result_data
+		setPreview(preview)
+
+		try {
+			const response = await fetch('/api/tracks/get', {
+				headers: { 'Content-Type': 'application/json' },
+				method: 'GET',
+			})
+			const result = await response.json()
+			const track = result.track
+
+			let char = '?'
+			let ai = 420
+			let zip5 = preview.receiver_data.zip5
+			let num = `${char}${ai}${zip5}${char}${track.trackNum}`
+			console.log(num)
+			// The return value is the canvas element
+			// await bwipjs.toCanvas('mycanvas', {
+			// 	bcid:        'code128',
+			// 	text:        num,
+			// 	scale:       2,	// 3x scaling factor
+			// 	height:      20,	// Bar height, in millimeters
+			// 	includetext: false,	// Show human-readable text
+			// 	textxalign:  'center',	// Always good to set this
+			// });
+
+			await bwipjs.toBuffer({ bcid:'qrcode', text:'0123456789' })
+			.then((png) => {
+				console.log(png.toString('base64'))
+				document.getElementById('barcode').innerHTML = 'data:image/png;base64,' + png.toString('base64')
+			}).catch((err) => {
+				console.log(err)
+				document.getElementById('barcode').innerHTML = err;
+			})
+		} catch (e) {
+			// `e` may be a string or Error object
+		}
+	
 	}
 
 	const [ type, setType ] = useState('priority')
@@ -57,6 +96,19 @@ export default function GenerateLabel() {
 	const handleSizeChange = event => {
 		console.log(event.target.value)
 		setSize(event.target.value)
+	}
+
+	const handleLabelDownload = event => {
+		let label = document.getElementById('my-label')
+		label.style.width = '4in'
+		label.style.height = '6in'
+		htmlToImage.toPng(label)
+		.then(function (dataUrl) {
+			var link = document.createElement('a');
+			link.download = 'label-4x6in.png';	
+			link.href = dataUrl;
+			link.click();
+		});
 	}
 
 	return (
@@ -167,54 +219,60 @@ export default function GenerateLabel() {
 								<div className="card-body">
 									{ preview.success 
 									? <div>
-										<div className="w-auto border border-2 border-dark text-dark p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '14px' }}>
-											<div className="row">
-												<div className="col-12">
-													<img src="/print-images/priority.jpg" alt="Logo" width="100%" 
-													style={{ borderBottom: '4px solid black', margin: '0px' }} />
-												</div>
-												<div className="col-12">
-													<img src="/print-images/priority2.png" alt="Logo" width="100%" 
-													style={{ borderBottom: '4px solid black', margin: '0px' }} />
-												</div>
-												<div className="col-6 p-4">
-													<address>
-														{ preview.sender_data.name ? preview.sender_data.name.toUpperCase() : null }<br/>
-														{ preview.sender_data.street1 ? preview.sender_data.street1 : null }
-														{ preview.sender_data.street2 ? ' '+preview.sender_data.street2 : null }<br/>
-														{ preview.sender_data.city ? ' '+preview.sender_data.city : null }
-														{ preview.sender_data.state ? ' '+preview.sender_data.state : null }
-														{ preview.sender_data.zip5 ? ' '+preview.sender_data.zip5 : null }
-														{ preview.sender_data.zip4 ? '-'+preview.sender_data.zip4 : null }
-													</address>
-												</div>
-												<div className="col-6 p-4">
-													<address className="text-right float-end">
-														Ship Date: { preview.date }<br/>
-														Weight: { preview.weight +' lb' }
-													</address>
-												</div>
-												<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
-													<address>
-														{ preview.receiver_data.name ? preview.receiver_data.name.toUpperCase() : null }<br/>
-														{ preview.receiver_data.street1 ? preview.receiver_data.street1 : null }
-														{ preview.receiver_data.street2 ? ' '+preview.receiver_data.street2 : null }<br/>
-														{ preview.receiver_data.city ? ' '+preview.receiver_data.city : null }
-														{ preview.receiver_data.state ? ' '+preview.receiver_data.state : null }
-														{ preview.receiver_data.zip5 ? ' '+preview.receiver_data.zip5 : null }
-														{ preview.receiver_data.zip4 ? '-'+preview.receiver_data.zip4 : null }
-													</address>
-												</div>
-												<div className="col-12 text-center">
-													<div style={{ borderTop: '4px solid black', margin: '0px' }}>
-														<div className="fw-bold">USPS TRACKING #EP</div>
-														<img src="/print-images/shippo.jpg" alt="Logo" width="100" />
-														<div className="fw-bold">9205 5900 9001 1319 7279 0376 03</div>
+										<div>
+											<button className="btn btn-primary btn-block" type="button" onClick={handleLabelDownload}>Download</button>
+										</div>
+										<div id="my-label" className="w-auto border border-2 bg-white p-0">
+											<div className="w-auto border border-2 border-dark text-dark bg-white p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
+												<div className="row">
+													<div className="col-12">
+														<img src="/print-images/priority.jpg" alt="Logo" width="100%" 
+														style={{ borderBottom: '4px solid black', margin: '0px' }} />
 													</div>
-												</div>
-												<div className="col-12 text-center">
-													<div style={{ borderTop: '4px solid black', margin: '0px' }}>
-														<img src="/print-images/shippo.jpg" alt="Logo" width="100" />
+													<div className="col-12">
+														<img src="/print-images/priority2.png" alt="Logo" width="100%" 
+														style={{ borderBottom: '4px solid black', margin: '0px' }} />
+													</div>
+													<div className="col-6 p-4">
+														<address>
+															{ preview.sender_data.name ? preview.sender_data.name.toUpperCase() : null }<br/>
+															{ preview.sender_data.street1 ? preview.sender_data.street1 : null }
+															{ preview.sender_data.street2 ? ' '+preview.sender_data.street2 : null }<br/>
+															{ preview.sender_data.city ? ' '+preview.sender_data.city : null }
+															{ preview.sender_data.state ? ' '+preview.sender_data.state : null }
+															{ preview.sender_data.zip5 ? ' '+preview.sender_data.zip5 : null }
+															{ preview.sender_data.zip4 ? '-'+preview.sender_data.zip4 : null }
+														</address>
+													</div>
+													<div className="col-6 p-4">
+														<address className="text-right float-end">
+															Ship Date: { preview.date }<br/>
+															Weight: { preview.weight +' lb' }
+														</address>
+													</div>
+													<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
+														<address>
+															{ preview.receiver_data.name ? preview.receiver_data.name.toUpperCase() : null }<br/>
+															{ preview.receiver_data.street1 ? preview.receiver_data.street1 : null }
+															{ preview.receiver_data.street2 ? ' '+preview.receiver_data.street2 : null }<br/>
+															{ preview.receiver_data.city ? ' '+preview.receiver_data.city : null }
+															{ preview.receiver_data.state ? ' '+preview.receiver_data.state : null }
+															{ preview.receiver_data.zip5 ? ' '+preview.receiver_data.zip5 : null }
+															{ preview.receiver_data.zip4 ? '-'+preview.receiver_data.zip4 : null }
+														</address>
+													</div>
+													<div className="col-12 text-center">
+														<div id="barcode" className="px-4" style={{ borderTop: '4px solid black', margin: '0px' }}>
+															<div className="fw-bold">USPS TRACKING #EP</div>
+															{/* <img id="myimg" alt="Logo" width="100" />
+															<canvas id="mycanvas"></canvas> */}
+															<div className="fw-bold">9205 5900 9001 1319 7279 0376 03</div>
+														</div>
+													</div>
+													<div className="col-12 text-center">
+														<div style={{ borderTop: '4px solid black', margin: '0px' }}>
+															<img src="/print-images/shippo.jpg" alt="Logo" width="100" />
+														</div>
 													</div>
 												</div>
 											</div>

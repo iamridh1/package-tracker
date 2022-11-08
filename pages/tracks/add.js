@@ -1,7 +1,6 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styles from '../../styles/Home.module.css'
 
 export default function Track() {
@@ -13,14 +12,7 @@ export default function Track() {
 	}
 
 	const [ alert, setAlert ] = useState({ status : false })
-
-	// useEffect(() => {
-	// 	console.log('first')
-	// 	setTimeout(() => {
-	// 		setAlert({ status : false })
-	// 	}, 3000)
-	// }, [])
-
+	
     // Handle
 	const handleSubmit = async (event) => {
         // Stop the form from submitting and refreshing the page.
