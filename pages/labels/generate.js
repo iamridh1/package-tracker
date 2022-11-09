@@ -3,8 +3,9 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import styles from '../../styles/Home.module.css'
-import bwipjs from 'bwip-js'
+import Barcode from 'jsbarcode-react'
 import * as htmlToImage from 'html-to-image'
+import StringMask from 'string-mask'
 
 export default function GenerateLabel() {
 	const [ preview, setPreview ] = useState({
@@ -29,58 +30,34 @@ export default function GenerateLabel() {
 
 		// Send the form data to our API and get a response.
 		const response = await fetch('/api/generate', {
-			// Body of the request is the JSON data we created above.
-			body: JSON.stringify(data),
-			// Tell the server we're sending JSON.
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			// The method is POST because we are sending data.
-			method: 'POST',
+			body: JSON.stringify(data),	// Body of the request is the JSON data we created above.
+			headers: { 'Content-Type': 'application/json' },	// Tell the server we're sending JSON.
+			method: 'POST',	// The method is POST because we are sending data.
 		})
 
 		// Get the response data from server as JSON.
-		// If server returns the name submitted, that means the form works.
 		const result = await response.json()
-		// console.log(result.result_data)
 		const preview = result.result_data
+		
+		const resp = await fetch('/api/tracks/get', {
+			headers: { 'Content-Type': 'application/json' },
+			method: 'GET',
+		})
+		const res = await resp.json()
+		const track = res.track
+
+		let char = '\u007c'
+		let ai = 420
+		let zip5 = preview.receiver_data.zip5
+		let barcode = `${char}${ai}${zip5}${char}${track.trackNum}`
+
+		let formatter = new StringMask('#### #### #### #### #### #### ##')
+    	let tracknum = formatter.apply(track.trackNum)
+
+		preview.barcode = barcode
+		preview.track = tracknum
+		console.log(preview)
 		setPreview(preview)
-
-		try {
-			const response = await fetch('/api/tracks/get', {
-				headers: { 'Content-Type': 'application/json' },
-				method: 'GET',
-			})
-			const result = await response.json()
-			const track = result.track
-
-			let char = '?'
-			let ai = 420
-			let zip5 = preview.receiver_data.zip5
-			let num = `${char}${ai}${zip5}${char}${track.trackNum}`
-			console.log(num)
-			// The return value is the canvas element
-			// await bwipjs.toCanvas('mycanvas', {
-			// 	bcid:        'code128',
-			// 	text:        num,
-			// 	scale:       2,	// 3x scaling factor
-			// 	height:      20,	// Bar height, in millimeters
-			// 	includetext: false,	// Show human-readable text
-			// 	textxalign:  'center',	// Always good to set this
-			// });
-
-			await bwipjs.toBuffer({ bcid:'qrcode', text:'0123456789' })
-			.then((png) => {
-				console.log(png.toString('base64'))
-				document.getElementById('barcode').innerHTML = 'data:image/png;base64,' + png.toString('base64')
-			}).catch((err) => {
-				console.log(err)
-				document.getElementById('barcode').innerHTML = err;
-			})
-		} catch (e) {
-			// `e` may be a string or Error object
-		}
-	
 	}
 
 	const [ type, setType ] = useState('priority')
@@ -262,11 +239,10 @@ export default function GenerateLabel() {
 														</address>
 													</div>
 													<div className="col-12 text-center">
-														<div id="barcode" className="px-4" style={{ borderTop: '4px solid black', margin: '0px' }}>
-															<div className="fw-bold">USPS TRACKING #EP</div>
-															{/* <img id="myimg" alt="Logo" width="100" />
-															<canvas id="mycanvas"></canvas> */}
-															<div className="fw-bold">9205 5900 9001 1319 7279 0376 03</div>
+														<div id="barcode" className="p-0 row" style={{ borderTop: '4px solid black', margin: '0px' }}>
+															<span className="fw-bold m-0 p-0">USPS TRACKING #EP</span>
+															<Barcode value={ `${preview.barcode}` } options={{ displayValue: false, margin: 1, flat: false }} />
+															<span className="fw-bold m-0 p-0">{ preview.track }</span>
 														</div>
 													</div>
 													<div className="col-12 text-center">
