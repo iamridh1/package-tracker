@@ -220,13 +220,13 @@ export default function GenerateLabel() {
 													</div>
 													<div className="col-6 p-4">
 														<address>
-															{ preview.sender_data.name ? preview.sender_data.name.toUpperCase() : '' }<br/>
-															{ preview.sender_data.street1 ? preview.sender_data.street1 : '' }
-															{ preview.sender_data.street2 ? ' '+preview.sender_data.street2 : '' }<br/>
-															{ preview.sender_data.city ? ' '+preview.sender_data.city : '' }
-															{ preview.sender_data.state ? ' '+preview.sender_data.state : '' }
-															{ preview.sender_data.zip5 ? ' '+preview.sender_data.zip5 : '' }
-															{ preview.sender_data.zip4 ? '-'+preview.sender_data.zip4 : '' }
+															{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
+															{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
+															{ (!preview.sender_data.street2 || preview.sender_data.street2 == 'NULL') ? null : ' '+preview.sender_data.street2 }<br/>
+															{ (!preview.sender_data.city || preview.sender_data.city == 'NULL') ? null : ' '+preview.sender_data.city }
+															{ (!preview.sender_data.state || preview.sender_data.state == 'NULL') ? null : ' '+preview.sender_data.state }
+															{ (!preview.sender_data.zip5 || preview.sender_data.zip5 == 'NULL') ? null : ' '+preview.sender_data.zip5 }
+															{ (!preview.sender_data.zip4 || preview.sender_data.zip4 == 'NULL') ? null : '-'+preview.sender_data.zip4 }
 														</address>
 													</div>
 													<div className="col-6 p-4">
@@ -237,13 +237,13 @@ export default function GenerateLabel() {
 													</div>
 													<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
 														<address>
-															{ preview.receiver_data.name ? preview.receiver_data.name.toUpperCase() : '' }<br/>
-															{ preview.receiver_data.street1 ? preview.receiver_data.street1 : '' }
-															{ preview.receiver_data.street2 ? ' '+preview.receiver_data.street2 : '' }<br/>
-															{ preview.receiver_data.city ? ' '+preview.receiver_data.city : '' }
-															{ preview.receiver_data.state ? ' '+preview.receiver_data.state : '' }
-															{ preview.receiver_data.zip5 ? ' '+preview.receiver_data.zip5 : '' }
-															{ preview.receiver_data.zip4 ? '-'+preview.receiver_data.zip4 : '' }
+															{ (!preview.receiver_data.name || preview.receiver_data.name == 'NULL') ? null : preview.receiver_data.name.toUpperCase() }<br/>
+															{ (!preview.receiver_data.street1 || preview.receiver_data.street1 == 'NULL') ? null : preview.receiver_data.street1 }
+															{ (!preview.receiver_data.street2 || preview.receiver_data.street2 == 'NULL') ? null : ' '+preview.receiver_data.street2 }<br/>
+															{ (!preview.receiver_data.city || preview.receiver_data.city == 'NULL') ? null : ' '+preview.receiver_data.city }
+															{ (!preview.receiver_data.state || preview.receiver_data.state == 'NULL') ? null : ' '+preview.receiver_data.state }
+															{ (!preview.receiver_data.zip5 || preview.receiver_data.zip5 == 'NULL') ? null : ' '+preview.receiver_data.zip5 }
+															{ (!preview.receiver_data.zip4 || preview.receiver_data.zip4 == 'NULL') ? null : '-'+preview.receiver_data.zip4 }
 														</address>
 													</div>
 													<div className="col-12 text-center">
