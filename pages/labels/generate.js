@@ -38,26 +38,34 @@ export default function GenerateLabel() {
 		// Get the response data from server as JSON.
 		const result = await response.json()
 		const preview = result.result_data
-		
-		const resp = await fetch('/api/tracks/get', {
-			headers: { 'Content-Type': 'application/json' },
-			method: 'GET',
-		})
-		const res = await resp.json()
-		const track = res.track
-
-		let char = '\u007c'
-		let ai = 420
-		let zip5 = preview.receiver_data.zip5
-		let barcode = `${char}${ai}${zip5}${char}${track.trackNum}`
-
-		let formatter = new StringMask('#### #### #### #### #### #### ##')
-    	let tracknum = formatter.apply(track.trackNum)
-
-		preview.barcode = barcode
-		preview.track = tracknum
 		console.log(preview)
-		setPreview(preview)
+		
+		if (preview.success == false) {
+			setPreview({
+				success : false,
+				status : 'Invalid address! Check your addresses.'
+			})
+		} else {
+			const resp = await fetch('/api/tracks/get', {
+				headers: { 'Content-Type': 'application/json' },
+				method: 'GET',
+			})
+			const res = await resp.json()
+			const track = res.track
+	
+			let char = '\u007c'
+			let ai = 420
+			let zip5 = preview.receiver_data.zip5
+			let barcode = `${char}${ai}${zip5}${char}${track.trackNum}`
+	
+			let formatter = new StringMask('#### #### #### #### #### #### ##')
+			let tracknum = formatter.apply(track.trackNum)
+	
+			preview.barcode = barcode
+			preview.track = tracknum
+			console.log(preview)
+			setPreview(preview)
+		}
 	}
 
 	const [ type, setType ] = useState('priority')
@@ -256,11 +264,20 @@ export default function GenerateLabel() {
 									</div>
 									: <div className="page-error">
 										<div className="page-inner">
-											{/* <h3 className="text-danger">Error !</h3> */}
-											<h3 className="text-primary mb-5 pb-5">Nothing to preview!</h3>
-											{/* <div className="page-description mb-5 text-danger">
-												Address not valid. <br/> Atleast one of the address you submitted is invalid.
-											</div> */}
+											{ preview.status 
+											? <div>
+												{/* <h3 className="text-danger">{ preview.status }</h3> */}
+												<div className="page-description mb-5 pb-5">
+													<span className="alert alert-danger">
+														{ preview.status }
+													</span>
+													{/* Address not valid. <br/> Atleast one of the address you submitted is invalid. */}
+												</div>
+											</div>
+											: <div>
+												<h3 className="text-primary mb-5 pb-5">Nothing to preview!</h3> 
+											</div>
+											}
 										</div>
 									</div>
 									}
