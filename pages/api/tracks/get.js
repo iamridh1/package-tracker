@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { prisma } from '../../db/prisma'
+import { prisma } from '../../../db/prisma'
 
 export default async function handle(req, res) {
 	try {
