@@ -125,16 +125,16 @@ export default function GenerateLabel() {
 													name="type" onChange={handleTypeChange} checked={type === 'priority'} />
 													<label className="form-check-label" htmlFor="priority">Priority</label>
 												</div>
-												<div className="form-check form-check-inline">
+												{/* <div className="form-check form-check-inline">
 													<input className="form-check-input" type="radio" id="express" value="express" 
 													name="type" onChange={handleTypeChange} checked={type === 'express'} />
 													<label className="form-check-label" htmlFor="express">Mail Express</label>
-												</div>
-												<div className="form-check form-check-inline">
+												</div> */}
+												{/* <div className="form-check form-check-inline">
 													<input className="form-check-input" type="radio" id="signature" value="signature" 
 													name="type" onChange={handleTypeChange} checked={type === 'signature'} />
 													<label className="form-check-label" htmlFor="signature">Signature</label>
-												</div>
+												</div> */}
 											</div>
 										</div>
 
@@ -162,11 +162,11 @@ export default function GenerateLabel() {
 													name="size" onChange={handleSizeChange} checked={size === '4x6'} />
 													<label className="form-check-label" htmlFor="4x6">4 x 6</label>
 												</div>
-												<div className="form-check form-check-inline">
+												{/* <div className="form-check form-check-inline">
 													<input className="form-check-input" type="radio" id="8x11" value="8x11" 
 													name="size" onChange={handleSizeChange} checked={size === '8x11'} />
 													<label className="form-check-label" htmlFor="8x11">8 x 11</label>
-												</div>
+												</div> */}
 											</div>
 										</div>
 

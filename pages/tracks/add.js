@@ -102,16 +102,16 @@ export default function Track() {
 													name="type" onChange={handleTypeChange} checked={type === 'priority'} />
 													<label className="form-check-label" htmlFor="priority">Priority</label>
 												</div>
-												<div className="form-check form-check-inline">
+												{/* <div className="form-check form-check-inline">
 													<input className="form-check-input" type="radio" id="express" value="express" 
 													name="type" onChange={handleTypeChange} checked={type === 'express'} />
 													<label className="form-check-label" htmlFor="express">Mail Express</label>
-												</div>
-												<div className="form-check form-check-inline">
+												</div> */}
+												{/* <div className="form-check form-check-inline">
 													<input className="form-check-input" type="radio" id="signature" value="signature" 
 													name="type" onChange={handleTypeChange} checked={type === 'signature'} />
 													<label className="form-check-label" htmlFor="signature">Signature</label>
-												</div>
+												</div> */}
 											</div>
 										</div>
 
