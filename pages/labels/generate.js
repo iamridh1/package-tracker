@@ -256,10 +256,11 @@ export default function GenerateLabel() {
 									</div>
 									: <div className="page-error">
 										<div className="page-inner">
-											<h3 className="text-danger">Error !</h3>
-											<div className="page-description mb-5 text-danger">
+											{/* <h3 className="text-danger">Error !</h3> */}
+											<h3 className="text-primary mb-5 pb-5">Nothing to preview!</h3>
+											{/* <div className="page-description mb-5 text-danger">
 												Address not valid. <br/> Atleast one of the address you submitted is invalid.
-											</div>
+											</div> */}
 										</div>
 									</div>
 									}
