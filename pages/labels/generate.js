@@ -6,6 +6,7 @@ import styles from '../../styles/Home.module.css'
 import Barcode from 'jsbarcode-react'
 import * as htmlToImage from 'html-to-image'
 import StringMask from 'string-mask'
+/* import axios from 'axios' */
 
 export default function GenerateLabel() {
 	const [ preview, setPreview ] = useState({
@@ -34,11 +35,18 @@ export default function GenerateLabel() {
 			headers: { 'Content-Type': 'application/json' },	// Tell the server we're sending JSON.
 			method: 'POST',	// The method is POST because we are sending data.
 		})
+		/* axios.post('/api/generate', data, {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(data => {
+			console.log(data)
+		}) */
 
 		// Get the response data from server as JSON.
 		const result = await response.json()
 		const preview = result.result_data
-		console.log(preview)
+		// console.log(preview)
 		
 		if (preview.success == false) {
 			setPreview({
@@ -63,7 +71,7 @@ export default function GenerateLabel() {
 	
 			preview.barcode = barcode
 			preview.track = tracknum
-			console.log(preview)
+			// console.log(preview)
 			setPreview(preview)
 		}
 	}
@@ -89,6 +97,7 @@ export default function GenerateLabel() {
 		label.style.height = '6in'
 		htmlToImage.toPng(label)
 		.then(function (dataUrl) {
+			// console.log(dataUrl)
 			var link = document.createElement('a');
 			link.download = 'label-4x6in.png';	
 			link.href = dataUrl;
@@ -204,11 +213,11 @@ export default function GenerateLabel() {
 								<div className="card-body">
 									{ preview.success 
 									? <div>
-										<div>
+										<div className="mb-2">
 											<button className="btn btn-primary btn-block" type="button" onClick={handleLabelDownload}>Download</button>
 										</div>
 										<div id="my-label" className="w-auto border border-2 bg-white p-0">
-											<div className="w-auto border border-2 border-dark text-dark bg-white p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
+											<div className="w-auto h-100 border border-2 border-dark text-dark bg-white p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
 												<div className="row">
 													<div className="col-12">
 														<img src="/print-images/priority.jpg" alt="Logo" width="100%" 
@@ -218,8 +227,8 @@ export default function GenerateLabel() {
 														<img src="/print-images/priority2.png" alt="Logo" width="100%" 
 														style={{ borderBottom: '4px solid black', margin: '0px' }} />
 													</div>
-													<div className="col-6 p-4">
-														<address>
+													<div className="col-6 p-4 pt-0">
+														<address style={{ height: '85px' }}>
 															{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
 															{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
 															{ (!preview.sender_data.street2 || preview.sender_data.street2 == 'NULL') ? null : ' '+preview.sender_data.street2 }<br/>
@@ -229,14 +238,14 @@ export default function GenerateLabel() {
 															{ (!preview.sender_data.zip4 || preview.sender_data.zip4 == 'NULL') ? null : '-'+preview.sender_data.zip4 }
 														</address>
 													</div>
-													<div className="col-6 p-4">
+													<div className="col-6 p-4 pt-0">
 														<address className="text-right float-end">
 															Ship Date: { preview.date }<br/>
 															Weight: { preview.weight +' lb' }
 														</address>
 													</div>
 													<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
-														<address>
+														<address style={{ height: '85px' }}>
 															{ (!preview.receiver_data.name || preview.receiver_data.name == 'NULL') ? null : preview.receiver_data.name.toUpperCase() }<br/>
 															{ (!preview.receiver_data.street1 || preview.receiver_data.street1 == 'NULL') ? null : preview.receiver_data.street1 }
 															{ (!preview.receiver_data.street2 || preview.receiver_data.street2 == 'NULL') ? null : ' '+preview.receiver_data.street2 }<br/>
@@ -247,7 +256,7 @@ export default function GenerateLabel() {
 														</address>
 													</div>
 													<div className="col-12 text-center">
-														<div id="barcode" className="p-0 row" style={{ borderTop: '4px solid black', margin: '0px' }}>
+														<div id="barcode" className="p-0 m-0 row" style={{ borderTop: '4px solid black' }}>
 															<span className="fw-bold m-0 p-0">USPS TRACKING #EP</span>
 															<Barcode value={ `${preview.barcode}` } options={{ displayValue: false, margin: 1, flat: false }} />
 															<span className="fw-bold m-0 p-0">{ preview.track }</span>
