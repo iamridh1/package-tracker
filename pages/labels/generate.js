@@ -216,8 +216,8 @@ export default function GenerateLabel() {
 										<div className="mb-2">
 											<button className="btn btn-primary btn-block" type="button" onClick={handleLabelDownload}>Download</button>
 										</div>
-										<div id="my-label" className="w-auto border border-2 bg-white p-0">
-											<div className="w-auto h-100 border border-2 border-dark text-dark bg-white p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
+										<div id="my-label" className="w-auto border border-2 bg-white p-0" style={{ height: '576px', width: '384' }}>
+											<div className="w-auto h-auto border border-2 border-dark text-dark bg-white p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
 												<div className="row">
 													<div className="col-12">
 														<img src="/print-images/priority.jpg" alt="Logo" width="100%" 
@@ -228,7 +228,7 @@ export default function GenerateLabel() {
 														style={{ borderBottom: '4px solid black', margin: '0px' }} />
 													</div>
 													<div className="col-6 p-4 pt-0">
-														<address style={{ height: '85px' }}>
+														<address style={{ lineHeight: '1.5rem', height: '85px' }}>
 															{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
 															{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
 															{ (!preview.sender_data.street2 || preview.sender_data.street2 == 'NULL') ? null : ' '+preview.sender_data.street2 }<br/>
@@ -239,13 +239,13 @@ export default function GenerateLabel() {
 														</address>
 													</div>
 													<div className="col-6 p-4 pt-0">
-														<address className="text-right float-end">
+														<address className="text-end float-end" style={{ lineHeight: '1.5rem', height: '85px' }}>
 															Ship Date: { preview.date }<br/>
 															Weight: { preview.weight +' lb' }
 														</address>
 													</div>
 													<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
-														<address style={{ height: '85px' }}>
+														<address style={{ lineHeight: '1.5rem', height: '85px', fontSize: '14px' }}>
 															{ (!preview.receiver_data.name || preview.receiver_data.name == 'NULL') ? null : preview.receiver_data.name.toUpperCase() }<br/>
 															{ (!preview.receiver_data.street1 || preview.receiver_data.street1 == 'NULL') ? null : preview.receiver_data.street1 }
 															{ (!preview.receiver_data.street2 || preview.receiver_data.street2 == 'NULL') ? null : ' '+preview.receiver_data.street2 }<br/>
