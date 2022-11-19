@@ -216,7 +216,7 @@ export default function GenerateLabel() {
 										<div className="mb-2">
 											<button className="btn btn-primary btn-block" type="button" onClick={handleLabelDownload}>Download</button>
 										</div>
-										<div id="my-label" className="w-auto border border-2 bg-white p-0" style={{ height: '576px', width: '384' }}>
+										<div id="my-label" className="w-auto border border-2 bg-white p-0" style={{ height: '576px', width: '384px' }}>
 											<div className="w-auto h-auto border border-2 border-dark text-dark bg-white p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
 												<div className="row">
 													<div className="col-12">
