@@ -61,11 +61,11 @@ export default function GenerateLabel() {
 			const res = await resp.json()
 			const track = res.track
 	
-			let char = '\u007c'
+			let char = String.fromCharCode(29)
 			let ai = 420
 			let zip5 = preview.receiver_data.zip5
 			let barcode = `${char}${ai}${zip5}${char}${track.trackNum}`
-	
+			
 			let formatter = new StringMask('#### #### #### #### #### #### ##')
 			let tracknum = formatter.apply(track.trackNum)
 	
@@ -109,7 +109,7 @@ export default function GenerateLabel() {
 				<title>Package Tracker</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<meta name="description" content="Instantly generate your trackings and download in png." />
-				{/* <link rel="icon" href="/favicon.ico" /> */}
+				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
 			<section className="section">
@@ -225,7 +225,7 @@ export default function GenerateLabel() {
 														<img src="/print-images/priority2.png" alt="Logo" width="100%" 
 														style={{ borderBottom: '4px solid black', margin: '0px' }} />
 													</div>
-													<div className="col-6 p-4 pt-0">
+													<div className="col-8 p-4 pt-0">
 														<address style={{ lineHeight: '1.3rem', height: '90px' }}>
 															{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
 															{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
@@ -236,7 +236,7 @@ export default function GenerateLabel() {
 															{ (!preview.sender_data.zip4 || preview.sender_data.zip4 == 'NULL') ? null : '-'+preview.sender_data.zip4 }
 														</address>
 													</div>
-													<div className="col-6 p-4 pt-0">
+													<div className="col-4 p-4 pt-0">
 														<address className="text-end float-end" style={{ lineHeight: '1.3rem', }}>
 															Ship Date: { preview.date }<br/>
 															Weight: { preview.weight +' lb' }
