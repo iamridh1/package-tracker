@@ -226,7 +226,7 @@ export default function GenerateLabel() {
 														style={{ borderBottom: '4px solid black', margin: '0px' }} />
 													</div>
 													<div className="col-7 p-4 pt-0">
-														<address style={{ lineHeight: '1.1rem', height: '90px', fontSize: '10px' }}>
+														<address style={{ lineHeight: '1.1rem', height: '85px', fontSize: '10px' }}>
 															{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
 															{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
 															{ (!preview.sender_data.street2 || preview.sender_data.street2 == 'NULL') ? null : ' '+preview.sender_data.street2 }<br/>
@@ -256,13 +256,13 @@ export default function GenerateLabel() {
 													<div className="col-12 text-center">
 														<div id="barcode" className="p-0 m-0 row" style={{ borderTop: '4px solid black' }}>
 															<span className="fw-bold m-0 p-0">USPS TRACKING #EP</span>
-															<Barcode value={ `${preview.barcode}` } options={{ displayValue: false, margin: 1, flat: false }} />
+															<Barcode value={ `${preview.barcode}` } options={{ displayValue: false, margin: 0, flat: false }} />
 															<span className="fw-bold m-0 p-0">{ preview.track }</span>
 														</div>
 													</div>
 													<div className="col-12 text-center">
-														<div style={{ borderTop: '4px solid black', margin: '0px', height: '50px' }}>
-															<img src="/print-images/shippo.jpg" alt="Logo" width="100" />
+														<div style={{ borderTop: '4px solid black', margin: '0px', height: '60px', padding: '0px' }}>
+															<img src="/print-images/shippo.jpg" alt="Logo" width="100" height="auto" />
 														</div>
 													</div>
 												</div>
