@@ -225,8 +225,8 @@ export default function GenerateLabel() {
 														<img src="/print-images/priority2.png" alt="Logo" width="100%" 
 														style={{ borderBottom: '4px solid black', margin: '0px' }} />
 													</div>
-													<div className="col-8 p-4 pt-0">
-														<address style={{ lineHeight: '1.3rem', height: '90px' }}>
+													<div className="col-7 p-4 pt-0">
+														<address style={{ lineHeight: '1.1rem', height: '90px', fontSize: '10px' }}>
 															{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
 															{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
 															{ (!preview.sender_data.street2 || preview.sender_data.street2 == 'NULL') ? null : ' '+preview.sender_data.street2 }<br/>
@@ -236,14 +236,14 @@ export default function GenerateLabel() {
 															{ (!preview.sender_data.zip4 || preview.sender_data.zip4 == 'NULL') ? null : '-'+preview.sender_data.zip4 }
 														</address>
 													</div>
-													<div className="col-4 p-4 pt-0">
-														<address className="text-end float-end" style={{ lineHeight: '1.3rem', }}>
+													<div className="col-5 p-4 pt-0">
+														<address className="text-end float-end" style={{ lineHeight: '1.1rem', fontSize: '10px' }}>
 															Ship Date: { preview.date }<br/>
 															Weight: { preview.weight +' lb' }
 														</address>
 													</div>
 													<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
-														<address style={{ lineHeight: '1.3rem', fontSize: '14px', height: '90px' }}>
+														<address style={{ lineHeight: '1.2rem', fontSize: '11px', height: '90px' }}>
 															{ (!preview.receiver_data.name || preview.receiver_data.name == 'NULL') ? null : preview.receiver_data.name.toUpperCase() }<br/>
 															{ (!preview.receiver_data.street1 || preview.receiver_data.street1 == 'NULL') ? null : preview.receiver_data.street1 }
 															{ (!preview.receiver_data.street2 || preview.receiver_data.street2 == 'NULL') ? null : ' '+preview.receiver_data.street2 }<br/>
