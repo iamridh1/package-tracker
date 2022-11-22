@@ -2,10 +2,10 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
-import styles from '../../styles/Home.module.css'
 import Barcode from 'jsbarcode-react'
 import * as htmlToImage from 'html-to-image'
 import StringMask from 'string-mask'
+import styles from '../../styles/Home.module.css'
 /* import axios from 'axios' */
 
 export default function GenerateLabel() {
@@ -35,13 +35,13 @@ export default function GenerateLabel() {
 			headers: { 'Content-Type': 'application/json' },	// Tell the server we're sending JSON.
 			method: 'POST',	// The method is POST because we are sending data.
 		})
-		/* axios.post('/api/generate', data, {
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then(data => {
-			console.log(data)
-		}) */
+		// axios.post('/api/generate', data, {
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	}
+		// }).then(data => {
+		// 	console.log(data)
+		// })
 
 		// Get the response data from server as JSON.
 		const result = await response.json()
@@ -93,16 +93,14 @@ export default function GenerateLabel() {
 
 	const handleLabelDownload = event => {
 		let label = document.getElementById('my-label')
-		label.style.width = '4in'
-		label.style.height = '6in'
 		htmlToImage.toPng(label)
 		.then(function (dataUrl) {
 			// console.log(dataUrl)
-			var link = document.createElement('a');
-			link.download = 'label-4x6in.png';	
-			link.href = dataUrl;
-			link.click();
-		});
+			var link = document.createElement('a')
+			link.download = 'label-4x6in.png'
+			link.href = dataUrl
+			link.click()
+		})
 	}
 
 	return (
@@ -111,7 +109,7 @@ export default function GenerateLabel() {
 				<title>Package Tracker</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<meta name="description" content="Instantly generate your trackings and download in png." />
-				<link rel="icon" href="/favicon.ico" />
+				{/* <link rel="icon" href="/favicon.ico" /> */}
 			</Head>
 
 			<section className="section">
@@ -127,7 +125,7 @@ export default function GenerateLabel() {
 
 					<div className="row">
 						
-						<div className="col-md-7">
+						<div className="col-12">
 							<div className="card">
 								<div className="card-header">
 									<h4>Generate Tracking Label</h4>
@@ -205,19 +203,19 @@ export default function GenerateLabel() {
 							</div>
 						</div>
 						
-						<div className="col-md-5">
+						<div className="col-12">
 							<div className="card">
 								<div className="card-header">
 									<h4>Preview</h4>
 								</div>
 								<div className="card-body">
 									{ preview.success 
-									? <div>
+									? <div style={{ overflow: 'auto' }}>
 										<div className="mb-2">
 											<button className="btn btn-primary btn-block" type="button" onClick={handleLabelDownload}>Download</button>
 										</div>
-										<div id="my-label" className="w-auto border border-2 bg-white p-0" style={{ height: '576px', width: '384px' }}>
-											<div className="w-auto h-auto border border-2 border-dark text-dark bg-white p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
+										<div id="my-label" className="border border-2 bg-white p-0" style={{ height: '6in', width: '4in' }}>
+											<div className="w-auto h-100 border border-2 border-dark text-dark bg-white p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
 												<div className="row">
 													<div className="col-12">
 														<img src="/print-images/priority.jpg" alt="Logo" width="100%" 
@@ -228,7 +226,7 @@ export default function GenerateLabel() {
 														style={{ borderBottom: '4px solid black', margin: '0px' }} />
 													</div>
 													<div className="col-6 p-4 pt-0">
-														<address style={{ lineHeight: '1.5rem', height: '85px' }}>
+														<address style={{ lineHeight: '1.3rem', height: '90px' }}>
 															{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
 															{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
 															{ (!preview.sender_data.street2 || preview.sender_data.street2 == 'NULL') ? null : ' '+preview.sender_data.street2 }<br/>
@@ -239,13 +237,13 @@ export default function GenerateLabel() {
 														</address>
 													</div>
 													<div className="col-6 p-4 pt-0">
-														<address className="text-end float-end" style={{ lineHeight: '1.5rem', height: '85px' }}>
+														<address className="text-end float-end" style={{ lineHeight: '1.3rem', }}>
 															Ship Date: { preview.date }<br/>
 															Weight: { preview.weight +' lb' }
 														</address>
 													</div>
 													<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
-														<address style={{ lineHeight: '1.5rem', height: '85px', fontSize: '14px' }}>
+														<address style={{ lineHeight: '1.3rem', fontSize: '14px', height: '90px' }}>
 															{ (!preview.receiver_data.name || preview.receiver_data.name == 'NULL') ? null : preview.receiver_data.name.toUpperCase() }<br/>
 															{ (!preview.receiver_data.street1 || preview.receiver_data.street1 == 'NULL') ? null : preview.receiver_data.street1 }
 															{ (!preview.receiver_data.street2 || preview.receiver_data.street2 == 'NULL') ? null : ' '+preview.receiver_data.street2 }<br/>
@@ -263,7 +261,7 @@ export default function GenerateLabel() {
 														</div>
 													</div>
 													<div className="col-12 text-center">
-														<div style={{ borderTop: '4px solid black', margin: '0px' }}>
+														<div style={{ borderTop: '4px solid black', margin: '0px', height: '50px' }}>
 															<img src="/print-images/shippo.jpg" alt="Logo" width="100" />
 														</div>
 													</div>
@@ -275,12 +273,10 @@ export default function GenerateLabel() {
 										<div className="page-inner">
 											{ preview.status 
 											? <div>
-												{/* <h3 className="text-danger">{ preview.status }</h3> */}
 												<div className="page-description mb-5 pb-5">
 													<span className="alert alert-danger">
 														{ preview.status }
 													</span>
-													{/* Address not valid. <br/> Atleast one of the address you submitted is invalid. */}
 												</div>
 											</div>
 											: <div>
