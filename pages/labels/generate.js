@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head'
 import Link from 'next/link'
-import { useState } from 'react'
-import Barcode from 'jsbarcode-react'
+import { useState, useEffect } from 'react'
+import bwipjs from 'bwip-js'
 import * as htmlToImage from 'html-to-image'
 import StringMask from 'string-mask'
 import styles from '../../styles/Home.module.css'
@@ -61,7 +61,9 @@ export default function GenerateLabel() {
 			const res = await resp.json()
 			const track = res.track
 	
-			let char = String.fromCharCode(29)
+			// let char = String.fromCharCode(29/232)
+			let char = '\u001D'
+			console.log(char)
 			let ai = 420
 			let zip5 = preview.receiver_data.zip5
 			let barcode = `${char}${ai}${zip5}${char}${track.trackNum}`
@@ -71,7 +73,7 @@ export default function GenerateLabel() {
 	
 			preview.barcode = barcode
 			preview.track = tracknum
-			// console.log(preview)
+			console.log(preview)
 			setPreview(preview)
 		}
 	}
@@ -95,13 +97,47 @@ export default function GenerateLabel() {
 		let label = document.getElementById('my-label')
 		htmlToImage.toPng(label)
 		.then(function (dataUrl) {
-			// console.log(dataUrl)
 			var link = document.createElement('a')
 			link.download = 'label-4x6in.png'
 			link.href = dataUrl
 			link.click()
 		})
 	}
+
+	const handleLabelDownloadAs8By11 = event => {
+		let label = document.getElementById('my-label')
+		label.style.width = '8in'
+		label.style.height = '11in'
+		label.style.fontSize = '18px'
+		
+		htmlToImage.toPng(label)
+		.then(function (dataUrl) {
+			var link = document.createElement('a')
+			link.download = 'label-8x11in.png'
+			link.href = dataUrl
+			link.click()
+			label.style.width = '4in'
+			label.style.height = '6in'
+			label.style.fontSize = '12px'
+		})
+	}
+
+	useEffect(() => {
+		try {
+			// The return value is the canvas element
+			let canvas = bwipjs.toCanvas('mycanvas', {
+				bcid: 'code128', // Barcode type
+				text: preview.barcode, // Text to encode
+				scale: 2, // 3x scaling factor
+				height: 22, // Bar height, in millimeters
+				includetext: false, // Show human-readable text
+				textxalign: 'center', // Always good to set this
+			});
+		} catch (e) {
+			// `e` may be a string or Error object
+			console.log(e)
+		}
+	})
 
 	return (
 		<div className="container">
@@ -212,10 +248,11 @@ export default function GenerateLabel() {
 									{ preview.success 
 									? <div style={{ overflow: 'auto' }}>
 										<div className="mb-2">
-											<button className="btn btn-primary btn-block" type="button" onClick={handleLabelDownload}>Download</button>
+											<button className="btn btn-primary btn-block me-3" type="button" onClick={handleLabelDownload}>Download</button>
+											<button className="btn btn-primary btn-block" type="button" onClick={handleLabelDownloadAs8By11}>Download As 8x11</button>
 										</div>
-										<div id="my-label" className="border border-2 bg-white p-0" style={{ height: '6in', width: '4in' }}>
-											<div className="w-auto h-100 border border-2 border-dark text-dark bg-white p-0 mx-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
+										<div id="my-label" className="border border-2 bg-white p-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
+											<div className="w-auto h-auto border border-2 border-dark text-dark bg-white p-0 mx-0">
 												<div className="row">
 													<div className="col-12">
 														<img src="/print-images/priority.jpg" alt="Logo" width="100%" 
@@ -226,7 +263,7 @@ export default function GenerateLabel() {
 														style={{ borderBottom: '4px solid black', margin: '0px' }} />
 													</div>
 													<div className="col-7 p-4 pt-0">
-														<address style={{ lineHeight: '1.1rem', height: '85px', fontSize: '10px' }}>
+														<address style={{ height: '100px', fontSize: '0.7rem' }}>
 															{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
 															{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
 															{ (!preview.sender_data.street2 || preview.sender_data.street2 == 'NULL') ? null : ' '+preview.sender_data.street2 }<br/>
@@ -237,13 +274,13 @@ export default function GenerateLabel() {
 														</address>
 													</div>
 													<div className="col-5 p-4 pt-0">
-														<address className="text-end float-end" style={{ lineHeight: '1.1rem', fontSize: '10px' }}>
+														<address className="text-end float-end" style={{ fontSize: '0.7rem' }}>
 															Ship Date: { preview.date }<br/>
 															Weight: { preview.weight +' lb' }
 														</address>
 													</div>
 													<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
-														<address style={{ lineHeight: '1.2rem', fontSize: '11px', height: '90px' }}>
+														<address style={{ fontSize: '0.85rem', height: '100px' }}>
 															{ (!preview.receiver_data.name || preview.receiver_data.name == 'NULL') ? null : preview.receiver_data.name.toUpperCase() }<br/>
 															{ (!preview.receiver_data.street1 || preview.receiver_data.street1 == 'NULL') ? null : preview.receiver_data.street1 }
 															{ (!preview.receiver_data.street2 || preview.receiver_data.street2 == 'NULL') ? null : ' '+preview.receiver_data.street2 }<br/>
@@ -256,13 +293,13 @@ export default function GenerateLabel() {
 													<div className="col-12 text-center">
 														<div id="barcode" className="p-0 m-0 row" style={{ borderTop: '4px solid black' }}>
 															<span className="fw-bold m-0 p-0">USPS TRACKING #EP</span>
-															<Barcode value={ `${preview.barcode}` } options={{ displayValue: false, margin: 0, flat: false }} />
+															<canvas id="mycanvas"></canvas>
 															<span className="fw-bold m-0 p-0">{ preview.track }</span>
 														</div>
 													</div>
 													<div className="col-12 text-center">
-														<div style={{ borderTop: '4px solid black', margin: '0px', height: '60px', padding: '0px' }}>
-															<img src="/print-images/shippo.jpg" alt="Logo" width="100" height="auto" />
+														<div style={{ borderTop: '4px solid black', margin: '0px', height: 'auto', padding: '0px' }}>
+															<img src="/print-images/shippo.jpg" alt="Logo" style={{ height: '40px', width: 'auto' }} />
 														</div>
 													</div>
 												</div>
