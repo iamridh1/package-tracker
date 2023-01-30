@@ -16,7 +16,7 @@ export default function Home() {
 
 				<main className={styles.main}>
 					<h1 className={styles.title}>
-						Welcome to 
+						Welcome to &nbsp;
 						<Link href="/">Package Tracker!</Link>
 					</h1>
 
@@ -25,14 +25,19 @@ export default function Home() {
 					</p>
 
 					<div className={styles.grid}>
-						<Link href="/tracks/add" className={styles.card}>
-							<h2>Add Tracking Numbers &rarr;</h2>
-							<p>Add tracking numbers for your tracking label generation.</p>
+						<Link href="/tracks/usps/add" className={styles.card}>
+							<h2>Add USPS Tracking Numbers &rarr;</h2>
+							<p>Add tracking numbers for your USPS tracking labels.</p>
+						</Link>
+
+						<Link href="/tracks/ups/add" className={styles.card}>
+							<h2>Add UPS Tracking Numbers &rarr;</h2>
+							<p>Add tracking numbers for your UPS tracking labels.</p>
 						</Link>
 
 						<Link href="/labels/generate" className={styles.card}>
 							<h2>Generate Tracking Label &rarr;</h2>
-							<p>Instantly generate your tracking and download in png.</p>
+							<p>Instantly generate your tracking and download.</p>
 						</Link>
 					</div>
 				</main>

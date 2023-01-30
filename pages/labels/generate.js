@@ -61,7 +61,6 @@ export default function GenerateLabel() {
 			const res = await resp.json()
 			const track = res.track
 	
-			// let char = String.fromCharCode(29/232)
 			let char = '\u001D'
 			console.log(char)
 			let ai = 420
@@ -251,57 +250,59 @@ export default function GenerateLabel() {
 											<button className="btn btn-primary btn-block me-3" type="button" onClick={handleLabelDownload}>Download</button>
 											<button className="btn btn-primary btn-block" type="button" onClick={handleLabelDownloadAs8By11}>Download As 8x11</button>
 										</div>
-										<div id="my-label" className="border border-2 bg-white p-0" style={{ fontFamily: 'Arial', fontSize: '12px' }}>
-											<div className="w-auto h-auto border border-2 border-dark text-dark bg-white p-0 mx-0">
-												<div className="row">
-													<div className="col-12">
-														<img src="/print-images/priority.jpg" alt="Logo" width="100%" 
-														style={{ borderBottom: '4px solid black', margin: '0px' }} />
+
+										<div id="my-label" className="bg-white text-dark p-0" style={{ border: '2px solid #000', fontFamily: 'sans-serif', fontSize: '14px', fontWeight: '500', width: '4in', height: '6in' }}>
+											<div className="w-100">
+												<img src="/print-images/priority.jpg" alt="Logo" width="100%" 
+												style={{ borderBottom: '4px solid black', margin: '0px' }} />
+											</div>
+											<div className="w-100">
+												<img src="/print-images/priority2.png" alt="Logo" width="100%" 
+												style={{ borderBottom: '4px solid black', margin: '0px' }} />
+											</div>
+											<div className="row" style={{ padding: '.5rem' }}>
+												<div className="col-7">
+													<address style={{ height: '100px' }}>
+														{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
+														{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
+														{ (!preview.sender_data.street2 || preview.sender_data.street2 == 'NULL') ? null : ' '+preview.sender_data.street2 }<br/>
+														{ (!preview.sender_data.city || preview.sender_data.city == 'NULL') ? null : ' '+preview.sender_data.city }
+														{ (!preview.sender_data.state || preview.sender_data.state == 'NULL') ? null : ' '+preview.sender_data.state }
+														{ (!preview.sender_data.zip5 || preview.sender_data.zip5 == 'NULL') ? null : ' '+preview.sender_data.zip5 }
+														{/* { (!preview.sender_data.zip4 || preview.sender_data.zip4 == 'NULL') ? null : '-'+preview.sender_data.zip4 } */}
+													</address>
+													<div style={{ height: '25px' }}>
+														{ (!preview.type == 'NULL') ? '<span>SIGNATURE WAIVED</span>' : null }
 													</div>
-													<div className="col-12">
-														<img src="/print-images/priority2.png" alt="Logo" width="100%" 
-														style={{ borderBottom: '4px solid black', margin: '0px' }} />
-													</div>
-													<div className="col-7 p-4 pt-0">
-														<address style={{ height: '100px', fontSize: '0.7rem' }}>
-															{ (!preview.sender_data.name || preview.sender_data.name == 'NULL') ? null : preview.sender_data.name.toUpperCase() }<br/>
-															{ (!preview.sender_data.street1 || preview.sender_data.street1 == 'NULL') ? null : preview.sender_data.street1 }
-															{ (!preview.sender_data.street2 || preview.sender_data.street2 == 'NULL') ? null : ' '+preview.sender_data.street2 }<br/>
-															{ (!preview.sender_data.city || preview.sender_data.city == 'NULL') ? null : ' '+preview.sender_data.city }
-															{ (!preview.sender_data.state || preview.sender_data.state == 'NULL') ? null : ' '+preview.sender_data.state }
-															{ (!preview.sender_data.zip5 || preview.sender_data.zip5 == 'NULL') ? null : ' '+preview.sender_data.zip5 }
-															{ (!preview.sender_data.zip4 || preview.sender_data.zip4 == 'NULL') ? null : '-'+preview.sender_data.zip4 }
-														</address>
-													</div>
-													<div className="col-5 p-4 pt-0">
-														<address className="text-end float-end" style={{ fontSize: '0.7rem' }}>
-															Ship Date: { preview.date }<br/>
-															Weight: { preview.weight +' lb' }
-														</address>
-													</div>
-													<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
-														<address style={{ fontSize: '0.85rem', height: '100px' }}>
-															{ (!preview.receiver_data.name || preview.receiver_data.name == 'NULL') ? null : preview.receiver_data.name.toUpperCase() }<br/>
-															{ (!preview.receiver_data.street1 || preview.receiver_data.street1 == 'NULL') ? null : preview.receiver_data.street1 }
-															{ (!preview.receiver_data.street2 || preview.receiver_data.street2 == 'NULL') ? null : ' '+preview.receiver_data.street2 }<br/>
-															{ (!preview.receiver_data.city || preview.receiver_data.city == 'NULL') ? null : ' '+preview.receiver_data.city }
-															{ (!preview.receiver_data.state || preview.receiver_data.state == 'NULL') ? null : ' '+preview.receiver_data.state }
-															{ (!preview.receiver_data.zip5 || preview.receiver_data.zip5 == 'NULL') ? null : ' '+preview.receiver_data.zip5 }
-															{ (!preview.receiver_data.zip4 || preview.receiver_data.zip4 == 'NULL') ? null : '-'+preview.receiver_data.zip4 }
-														</address>
-													</div>
-													<div className="col-12 text-center">
-														<div id="barcode" className="p-0 m-0 row" style={{ borderTop: '4px solid black' }}>
-															<span className="fw-bold m-0 p-0">USPS TRACKING #EP</span>
-															<canvas id="mycanvas"></canvas>
-															<span className="fw-bold m-0 p-0">{ preview.track }</span>
-														</div>
-													</div>
-													<div className="col-12 text-center">
-														<div style={{ borderTop: '4px solid black', margin: '0px', height: 'auto', padding: '0px' }}>
-															<img src="/print-images/shippo.jpg" alt="Logo" style={{ height: '40px', width: 'auto' }} />
-														</div>
-													</div>
+												</div>
+												<div className="col-5">
+													<address className="text-end float-end" style={{ textTransform: 'capitalize', lineHeight: '1.5rem' }}>
+														Ship Date: { preview.date }<br/>
+														Weight: { preview.weight +' lb' }<br/>
+													</address>
+												</div>
+											</div>
+											<div className="col-8 offset-2 d-flex align-items-center justify-items-center">
+												<address style={{ fontSize: '0.85rem', height: '80px' }}>
+													{ (!preview.receiver_data.name || preview.receiver_data.name == 'NULL') ? null : preview.receiver_data.name.toUpperCase() }<br/>
+													{ (!preview.receiver_data.street1 || preview.receiver_data.street1 == 'NULL') ? null : preview.receiver_data.street1 }
+													{ (!preview.receiver_data.street2 || preview.receiver_data.street2 == 'NULL') ? null : ' '+preview.receiver_data.street2 }<br/>
+													{ (!preview.receiver_data.city || preview.receiver_data.city == 'NULL') ? null : ' '+preview.receiver_data.city }
+													{ (!preview.receiver_data.state || preview.receiver_data.state == 'NULL') ? null : ' '+preview.receiver_data.state }
+													{ (!preview.receiver_data.zip5 || preview.receiver_data.zip5 == 'NULL') ? null : ' '+preview.receiver_data.zip5 }
+													{ (!preview.receiver_data.zip4 || preview.receiver_data.zip4 == 'NULL') ? null : '-'+preview.receiver_data.zip4 }
+												</address>
+											</div>
+											<div className="col-12 text-center">
+												<div id="barcode" className="p-0 m-0 row" style={{ borderTop: '4px solid black' }}>
+													<span className="fw-bold m-0 p-0">USPS TRACKING #EP</span>
+													<canvas id="mycanvas"></canvas>
+													<span className="fw-bold m-0 p-0">{ preview.track }</span>
+												</div>
+											</div>
+											<div className="col-12 text-center">
+												<div style={{ borderTop: '4px solid black', margin: '0px', height: 'auto', padding: '0px' }}>
+													<img src="/print-images/shippo.jpg" alt="Logo" style={{ height: '40px', width: 'auto' }} />
 												</div>
 											</div>
 										</div>

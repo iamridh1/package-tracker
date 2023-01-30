@@ -62,7 +62,7 @@ export default function Track() {
 	}
 
 	return (
-		<div className={styles.container}>
+		<div className="container">
 			<Head>
 				<title>Package Tracker</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -72,6 +72,11 @@ export default function Track() {
 
 			<section className="section">
 				<div className="section-header mt-2">
+					<div className="section-header-back">
+						<Link href="/" className="btn btn-icon" style={{ fontSize: '20px' }}>
+							&lArr;
+						</Link>
+					</div>
 					<h1 className={styles.title}>
 						<Link href="/">
 							Package Tracker
@@ -79,14 +84,14 @@ export default function Track() {
 					</h1>
 				</div>
 				<div className="section-body">
-					<h2 className="section-title">Get started by generating tracking label.</h2>
+					<h2 className="section-title">Add USPS tracking label</h2>
 
 					<div className="row">
 						
 						<div className="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-8 offset-sm-2">
 							<div className="card">
 								<div className="card-header">
-									<h4>Generate Tracking Label</h4>
+									<h4>Add Tracking Label</h4>
 								</div>
 								<div className="card-body">
 									<form id="add-track" onSubmit={handleSubmit}>
@@ -98,20 +103,30 @@ export default function Track() {
 											<label className="form-control-label">Type <code>*</code></label>
 											<div>
 												<div className="form-check form-check-inline">
-													<input className="form-check-input" type="radio" id="priority" value="priority" 
-													name="type" onChange={handleTypeChange} checked={type === 'priority'} />
-													<label className="form-check-label" htmlFor="priority">Priority</label>
+													<input className="form-check-input" type="radio" id="ground" value="ground" 
+													name="type" onChange={handleTypeChange} checked={type === 'ground'} />
+													<label className="form-check-label" htmlFor="ground">UPS Ground</label>
 												</div>
-												{/* <div className="form-check form-check-inline">
-													<input className="form-check-input" type="radio" id="express" value="express" 
-													name="type" onChange={handleTypeChange} checked={type === 'express'} />
-													<label className="form-check-label" htmlFor="express">Mail Express</label>
-												</div> */}
-												{/* <div className="form-check form-check-inline">
-													<input className="form-check-input" type="radio" id="signature" value="signature" 
-													name="type" onChange={handleTypeChange} checked={type === 'signature'} />
-													<label className="form-check-label" htmlFor="signature">Signature</label>
-												</div> */}
+												<div className="form-check form-check-inline">
+													<input className="form-check-input" type="radio" id="next_day_air" value="next_day_air" 
+													name="type" onChange={handleTypeChange} checked={type === 'next_day_air'} />
+													<label className="form-check-label" htmlFor="next_day_air">UPS Next Day Air</label>
+												</div>
+												<div className="form-check form-check-inline">
+													<input className="form-check-input" type="radio" id="next_day_air_early" value="next_day_air_early" 
+													name="type" onChange={handleTypeChange} checked={type === 'next_day_air_early'} />
+													<label className="form-check-label" htmlFor="next_day_air_early">UPS Next Day Air Early</label>
+												</div>
+												<div className="form-check form-check-inline">
+													<input className="form-check-input" type="radio" id="2nd_day_air" value="2nd_day_air" 
+													name="type" onChange={handleTypeChange} checked={type === '2nd_day_air'} />
+													<label className="form-check-label" htmlFor="2nd_day_air">UPS 2ND Day Air</label>
+												</div>
+												<div className="form-check form-check-inline">
+													<input className="form-check-input" type="radio" id="3day_select" value="3day_select" 
+													name="type" onChange={handleTypeChange} checked={type === '3day_select'} />
+													<label className="form-check-label" htmlFor="3day_select">UPS 3 Day Select</label>
+												</div>
 											</div>
 										</div>
 
